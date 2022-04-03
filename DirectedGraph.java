@@ -11,6 +11,7 @@ public class DirectedGraph {
 	Map<String, ArrayList<Details>> tripLists;
 	Map<Integer, ArrayList<Edge>> adjLists;
 	ArrayList<StopIDWithTripID> tmpLists;
+	int numOfVertices = 50000;
 
 	public DirectedGraph(String filename) throws IOException {
 		BufferedReader br = new BufferedReader(new FileReader(filename));
@@ -33,7 +34,7 @@ public class DirectedGraph {
 			int pickup_type = Integer.valueOf(arrayForLine[6]);
 			int drop_off_type = Integer.valueOf(arrayForLine[7]);
 			String shape_dist_traveled;
-			if(arrayForLine.length == 7)
+			if(arrayForLine.length == 9)
 			{
 				shape_dist_traveled = arrayForLine[8];
 			}
@@ -93,5 +94,40 @@ public class DirectedGraph {
 				}
 			}
 		}
+		
+		br = new BufferedReader(new FileReader("transfers.txt"));
+		br.readLine();
+		curLine = br.readLine();
+		
+		while(curLine != null)
+		{
+			String arrayForLine[] = curLine.split(",");
+			int vertex = Integer.valueOf(arrayForLine[0]);
+			int adjVertex = Integer.valueOf(arrayForLine[1]);
+			int transfer_type = Integer.valueOf(arrayForLine[2]);
+			double weight = 0;
+			if(transfer_type == 0)
+			{
+				weight = 2;
+			}
+			else
+			{
+				double min_transfer_time = Double.valueOf(arrayForLine[3]);
+				weight = min_transfer_time / 100;
+			}
+			
+			ArrayList<Edge> list = adjLists.get(vertex);
+			if(list == null)
+			{
+				list = new ArrayList<Edge>();
+				
+			}
+			Edge edge = new Edge(vertex, adjVertex, weight);
+			list.add(edge);
+			adjLists.put(vertex, list);
+			curLine = br.readLine();
+		}
+		
+		br.close();
 	}
 }
