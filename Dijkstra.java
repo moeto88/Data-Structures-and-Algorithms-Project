@@ -52,6 +52,7 @@ public class Dijkstra {
 		{
 			int vertex = pq.remove();
 			
+			
 			ArrayList<Edge> keyList = adjList.get(vertex);
 			if(keyList == null)
 			{
