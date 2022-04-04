@@ -11,7 +11,7 @@ public class DirectedGraph {
 	Map<String, ArrayList<Details>> tripLists;
 	Map<Integer, ArrayList<Edge>> adjLists;
 	ArrayList<StopIDWithTripID> tmpLists;
-	int numOfVertices = 50000;
+	int maxId = 12479;
 
 	public DirectedGraph(String filename) throws IOException {
 		BufferedReader br = new BufferedReader(new FileReader(filename));

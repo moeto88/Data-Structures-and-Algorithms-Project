@@ -12,9 +12,9 @@ public class Main {
 		Scanner scanner = new Scanner(System.in);
 		int bus_stop1 = scanner.nextInt();
 		int bus_stop2 = scanner.nextInt();
-		double shortestPath[] = algo.DijkstraAlgo(bus_stop1);
-		double distFromVertex1ToVertex2 = shortestPath[bus_stop2];
-		System.out.print(distFromVertex1ToVertex2);
+		algo.DijkstraAlgo(bus_stop1, bus_stop2);
+		algo.PrintRoute(bus_stop1, bus_stop2);
+		algo.PrintCost(bus_stop2);
 	}
 
 }
