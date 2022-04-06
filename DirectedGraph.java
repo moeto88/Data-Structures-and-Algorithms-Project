@@ -8,19 +8,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DirectedGraph {
-	Map<String, ArrayList<Details>> tripLists;
+	Map<String, ArrayList<TripDetails>> tripLists;
 	Map<Integer, ArrayList<Edge>> adjLists;
 	ArrayList<StopIDWithTripID> tmpLists;
 	int maxId = 12479;
 
 	public DirectedGraph(String filename) throws IOException {
 		BufferedReader br = new BufferedReader(new FileReader(filename));
-		tripLists = new HashMap<String, ArrayList<Details>>();
+		tripLists = new HashMap<String, ArrayList<TripDetails>>();
 		tmpLists = new ArrayList<StopIDWithTripID>();
 		br.readLine();
 		String curLine = br.readLine();
-		
-		
+
+
 		while(curLine != null)
 		{
 			curLine = curLine.replace(", ", ",");
@@ -42,31 +42,31 @@ public class DirectedGraph {
 			{
 				shape_dist_traveled = "";
 			}
-			
+
 			StopIDWithTripID id = new StopIDWithTripID(trip_id, stop_id);
 			tmpLists.add(id);
-			
-			ArrayList<Details> list2 = tripLists.get(arraival_time);
+
+			ArrayList<TripDetails> list2 = tripLists.get(arraival_time);
 			if(list2 == null)
 			{
-				list2 = new ArrayList<Details>();
+				list2 = new ArrayList<TripDetails>();
 			}
-			
-			Details det = new Details(trip_id, arraival_time, departure_time, stop_id,
+
+			TripDetails det = new TripDetails(trip_id, arraival_time, departure_time, stop_id,
 					stop_sequence, stop_headsign, pickup_type, drop_off_type, shape_dist_traveled);
 			list2.add(det);
 			tripLists.put(arraival_time, list2);
 			curLine = br.readLine();
 		}
 		br.close();
-		
+
 		adjLists = new HashMap<Integer, ArrayList<Edge>>();
 		for(int i = 0; i < tmpLists.size() - 1; i++)
 		{
 			StopIDWithTripID id1 = tmpLists.get(i);
 			i++;
 			StopIDWithTripID id2 = tmpLists.get(i);
-			
+
 			if(id1.trip_id == id2.trip_id)
 			{
 				int vertex = id1.stop_id;
@@ -77,7 +77,7 @@ public class DirectedGraph {
 				{
 					list = new ArrayList<Edge>();
 				}
-				
+
 				boolean foundAdjVertex = false;
 				for(Edge edge: list)
 				{
@@ -94,11 +94,11 @@ public class DirectedGraph {
 				}
 			}
 		}
-		
+
 		br = new BufferedReader(new FileReader("transfers.txt"));
 		br.readLine();
 		curLine = br.readLine();
-		
+
 		while(curLine != null)
 		{
 			String arrayForLine[] = curLine.split(",");
@@ -115,19 +115,19 @@ public class DirectedGraph {
 				double min_transfer_time = Double.valueOf(arrayForLine[3]);
 				weight = min_transfer_time / 100;
 			}
-			
+
 			ArrayList<Edge> list = adjLists.get(vertex);
 			if(list == null)
 			{
 				list = new ArrayList<Edge>();
-				
+
 			}
 			Edge edge = new Edge(vertex, adjVertex, weight);
 			list.add(edge);
 			adjLists.put(vertex, list);
 			curLine = br.readLine();
 		}
-		
+
 		br.close();
 	}
 }

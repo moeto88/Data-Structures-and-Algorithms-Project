@@ -6,9 +6,9 @@ public class Main {
 	
 	
 	public static void main(String[] args) throws IOException {
-		
-		Dijkstra algo = new Dijkstra("stop_times.txt");
-		System.out.println("Type 2 bus stops ID divide by a space");
+		Stop stop = new Stop("stops.txt");
+		Dijkstra algo = new Dijkstra("stop_times.txt", stop);
+		System.out.println("Type 2 bus stop IDs separated by a space");
 		Scanner scanner = new Scanner(System.in);
 		int bus_stop1 = scanner.nextInt();
 		int bus_stop2 = scanner.nextInt();
@@ -16,5 +16,4 @@ public class Main {
 		algo.PrintRoute(bus_stop1, bus_stop2);
 		algo.PrintCost(bus_stop2);
 	}
-
 }
