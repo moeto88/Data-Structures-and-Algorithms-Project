@@ -1,21 +1,19 @@
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 public class DirectedGraph {
-	Map<String, ArrayList<TripDetails>> tripLists;
+	Map<Integer, ArrayList<TripDetails>> tripLists;
 	Map<Integer, ArrayList<Edge>> adjLists;
 	ArrayList<StopIDWithTripID> tmpLists;
 	int maxId = 12479;
 
 	public DirectedGraph(String filename) throws IOException {
 		BufferedReader br = new BufferedReader(new FileReader(filename));
-		tripLists = new HashMap<String, ArrayList<TripDetails>>();
+		tripLists = new HashMap<Integer, ArrayList<TripDetails>>();
 		tmpLists = new ArrayList<StopIDWithTripID>();
 		br.readLine();
 		String curLine = br.readLine();
@@ -26,8 +24,8 @@ public class DirectedGraph {
 			curLine = curLine.replace(", ", ",");
 			String arrayForLine[] = curLine.split(",");
 			int trip_id = Integer.valueOf(arrayForLine[0]);
-			String arraival_time = arrayForLine[1];
-			String departure_time = arrayForLine[2];
+			int arraival_time = Integer.valueOf(arrayForLine[1].replaceAll("[^0-9]", ""));
+			int departure_time = Integer.valueOf(arrayForLine[2].replaceAll("[^0-9]", ""));;
 			int stop_id = Integer.valueOf(arrayForLine[3]);
 			int stop_sequence = Integer.valueOf(arrayForLine[4]);
 			String stop_headsign = arrayForLine[5];
@@ -45,19 +43,24 @@ public class DirectedGraph {
 
 			StopIDWithTripID id = new StopIDWithTripID(trip_id, stop_id);
 			tmpLists.add(id);
-
-			ArrayList<TripDetails> list2 = tripLists.get(arraival_time);
-			if(list2 == null)
+			
+			if(arraival_time < 235959 && departure_time < 235959)
 			{
-				list2 = new ArrayList<TripDetails>();
+				
+				ArrayList<TripDetails> list2 = tripLists.get(arraival_time);
+				if(list2 == null)
+				{
+					list2 = new ArrayList<TripDetails>();
+				}
+				
+				TripDetails det = new TripDetails(trip_id, arraival_time, departure_time, stop_id,
+						stop_sequence, stop_headsign, pickup_type, drop_off_type, shape_dist_traveled);
+				list2.add(det);
+				tripLists.put(arraival_time, list2);
 			}
-
-			TripDetails det = new TripDetails(trip_id, arraival_time, departure_time, stop_id,
-					stop_sequence, stop_headsign, pickup_type, drop_off_type, shape_dist_traveled);
-			list2.add(det);
-			tripLists.put(arraival_time, list2);
 			curLine = br.readLine();
 		}
+		
 		br.close();
 
 		adjLists = new HashMap<Integer, ArrayList<Edge>>();

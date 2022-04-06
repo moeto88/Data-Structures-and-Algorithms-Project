@@ -2,8 +2,8 @@
 public class TripDetails {
 
 	int trip_id;
-	String arraival_time;
-	String departure_time;
+	int arraival_time;
+	int departure_time;
 	int stop_id;
 	int stop_sequence;
 	String stop_headsign;
@@ -11,7 +11,7 @@ public class TripDetails {
 	int drop_off_type;
 	String shape_dist_traveled;
 
-	public TripDetails(int trip_id, String arraival_time, String departure_time, int stop_id, int stop_sequence,
+	public TripDetails(int trip_id, int arraival_time, int departure_time, int stop_id, int stop_sequence,
 			String stop_headsign, int pickup_type, int drop_off_type, String shape_dist_traveled) {
 		this.trip_id = trip_id;
 		this.arraival_time = arraival_time;

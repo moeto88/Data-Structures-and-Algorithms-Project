@@ -7,124 +7,144 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 
 public class Dijkstra {
-
-	DirectedGraph graph;
 	double negInfinity = Double.NEGATIVE_INFINITY;
 	double posInfinity = Double.POSITIVE_INFINITY;
 	Map<Integer, ArrayList<Route>> routeList;
 	ArrayList<Integer> finalRouteList;
 	double distTo[];
+	DirectedGraph graph;
 	Stop stop;
+	int startID;
+	int stopID;
 
-	public Dijkstra(String filename, Stop stop) throws IOException {
-		graph = new DirectedGraph(filename);
+	public Dijkstra(DirectedGraph graph, Stop stop, int bus_stop1, int bus_stop2){
+		this.graph =  graph;
 		this.stop = stop;
+		this.startID = bus_stop1;
+		this.stopID = bus_stop2;
 	}
 
-	public void DijkstraAlgo(int start, int stop) {
+	public boolean dijkstraAlgo() {
 		Map<Integer, ArrayList<Edge>> adjList = graph.adjLists;
-		distTo = new double[graph.maxId];
-		Queue<Integer> pq = new PriorityQueue<>(Comparator.comparing(integer -> distTo[integer]));
-		routeList = new HashMap<Integer, ArrayList<Route>>();
-
-		for(int i = 0; i < graph.maxId; i++)
+		ArrayList<Edge> findStartId = adjList.get(startID);
+		if(findStartId != null)
 		{
-			if(i == start)
+			distTo = new double[graph.maxId];
+			Queue<Integer> pq = new PriorityQueue<>(Comparator.comparing(integer -> distTo[integer]));
+			routeList = new HashMap<Integer, ArrayList<Route>>();
+			
+			for(int i = 0; i < graph.maxId; i++)
 			{
-				ArrayList<Edge> keyList = adjList.get(start);
+				if(i == startID)
+				{
+					ArrayList<Edge> keyList = adjList.get(startID);
+					for(Edge edge: keyList)
+					{
+						if(startID == edge.adjVertex)
+						{
+							distTo[i] = edge.weight;
+							break;
+						}
+						else
+						{
+							distTo[i] = 0;
+						}
+					}
+				}
+				else
+				{
+					distTo[i] = posInfinity;
+				}
+			}
+			
+			pq.add(startID);
+			
+			boolean completedVertex[] = new boolean[graph.maxId];
+			
+			while(pq.isEmpty() != true)
+			{
+				int vertex = pq.remove();
+				
+				
+				ArrayList<Edge> keyList = adjList.get(vertex);
+				if(keyList == null)
+				{
+					keyList = new ArrayList<Edge>();
+				}
+				
 				for(Edge edge: keyList)
 				{
-					if(start == edge.adjVertex)
+					int connectingVertex = edge.adjVertex;
+					
+					if(completedVertex[connectingVertex] == false)
 					{
-						distTo[i] = edge.weight;
-						break;
-					}
-					else
-					{
-						distTo[i] = 0;
-					}
-				}
-			}
-			else
-			{
-				distTo[i] = posInfinity;
-			}
-		}
-
-		pq.add(start);
-
-		boolean completedVertex[] = new boolean[graph.maxId];
-
-		while(pq.isEmpty() != true)
-		{
-			int vertex = pq.remove();
-
-
-			ArrayList<Edge> keyList = adjList.get(vertex);
-			if(keyList == null)
-			{
-				keyList = new ArrayList<Edge>();
-			}
-
-			for(Edge edge: keyList)
-			{
-				int connectingVertex = edge.adjVertex;
-
-				if(completedVertex[connectingVertex] == false)
-				{
-					double updatedWeight = distTo[vertex] + edge.weight;
-
-					if(updatedWeight < distTo[connectingVertex])
-					{
-						distTo[connectingVertex] = updatedWeight;
-						ArrayList<Route> tmpList = routeList.get(vertex);
-						if(tmpList == null)
+						double updatedWeight = distTo[vertex] + edge.weight;
+						
+						if(updatedWeight < distTo[connectingVertex])
 						{
-							tmpList = new ArrayList<Route>();
+							distTo[connectingVertex] = updatedWeight;
+							ArrayList<Route> tmpList = routeList.get(vertex);
+							if(tmpList == null)
+							{
+								tmpList = new ArrayList<Route>();
+							}
+							
+							Route route = new Route(vertex, connectingVertex);
+							tmpList.add(route);
+							routeList.put(vertex, tmpList);
 						}
-
-						Route route = new Route(vertex, connectingVertex);
-						tmpList.add(route);
-						routeList.put(vertex, tmpList);
+						
+						pq.remove(connectingVertex);
+						pq.add(connectingVertex);
 					}
-
-					pq.remove(connectingVertex);
-					pq.add(connectingVertex);
 				}
+				
+				completedVertex[vertex] = true;
 			}
-
-			completedVertex[vertex] = true;
+			
+			return true;
+		}
+		else
+		{
+			return false;
 		}
 	}
 
-	public void PrintRoute(int bus_stop1, int bus_stop2) {
-
-		finalRouteList = new ArrayList<Integer>();
-		int curStop = bus_stop2;
-		finalRouteList.add(curStop);
-		int finalStop = bus_stop1;
-		while(curStop != finalStop)
-		{
-			curStop = getRoutes(curStop);
-		}
+	public void printRoute() {
 		
-		System.out.println("Route from " + bus_stop1 + " to " + bus_stop2 + ": ");
-		int index = 1;
-		for(int i = finalRouteList.size() - 1; i >= 0; i--)
+		if(getCost() != 0)
 		{
-			int stopID = finalRouteList.get(i);
-			System.out.println("\n" + index + ": " + stopID);
-			StopDetals det = stop.stopLists.get(stopID);
-			System.out.println("   stop_code: " + det.stop_code);
-			System.out.println("   stop_name: " + det.stop_name);
-			System.out.println("   stop_desc: " + det.stop_desc);
-			System.out.println("   stop_lat: " + det.stop_lat);
-			System.out.println("   stop_lon: " + det.stop_lon);
-			System.out.println("   zone_id: " + det.zone_id);
-			System.out.println("   stop_url: " + det.stop_url);
-			System.out.println("   location_type: " + det.location_type);
-			System.out.println("   parent_station: " + det.parent_station);
-			index++;
+			finalRouteList = new ArrayList<Integer>();
+			int curStop = stopID;
+			finalRouteList.add(curStop);
+			int finalStop = startID;
+			while(curStop != finalStop)
+			{
+				curStop = getRoutes(curStop);
+			}
+			
+			System.out.println("Route from " + startID + " to " + stopID + ": ");
+			int index = 1;
+			for(int i = finalRouteList.size() - 1; i >= 0; i--)
+			{
+				int stopID = finalRouteList.get(i);
+				System.out.println("\n" + index + ": " + stopID);
+				StopDetals det = stop.stopLists.get(stopID);
+				System.out.println("   stop_code: " + det.stop_code);
+				System.out.println("   stop_name: " + det.stop_name);
+				System.out.println("   stop_desc: " + det.stop_desc);
+				System.out.println("   stop_lat: " + det.stop_lat);
+				System.out.println("   stop_lon: " + det.stop_lon);
+				System.out.println("   zone_id: " + det.zone_id);
+				System.out.println("   stop_url: " + det.stop_url);
+				System.out.println("   location_type: " + det.location_type);
+				System.out.println("   parent_station: " + det.parent_station);
+				index++;
+			}
+		}
+		else
+		{
+			System.out.println("There is no route from " + startID + " to " + stopID);
 		}
 		System.out.println();
 	}
@@ -152,8 +172,12 @@ public class Dijkstra {
 		return routeList;
 	}
 
-	public void PrintCost(int stop) {
-		double cost = distTo[stop];
-		System.out.println("Cost: " + cost);
+	public void printCost() {
+		double cost = getCost();
+		System.out.println("The cost associated with a route from " + startID + " to " + stopID + " is " + cost + "\n");
+	}
+
+	private double getCost() {
+		return distTo[stopID];
 	}
 }
