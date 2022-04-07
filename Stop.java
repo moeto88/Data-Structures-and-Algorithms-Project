@@ -36,6 +36,8 @@ public class Stop {
 			{
 				parent_station = "";
 			}
+			
+			stop_name = makeMeaningfulStop_name(stop_name);
 
 			StopDetals det = new StopDetals(stop_id, stop_code, stop_name, stop_desc, stop_lat
 					, stop_lon, zone_id, stop_url, location_type, parent_station);
@@ -46,4 +48,17 @@ public class Stop {
 		br.close();
 	}
 
+	private String makeMeaningfulStop_name(String stop_name) {
+		String flagStop = stop_name.substring(0, 3);
+		if(flagStop.equals("WB ") || flagStop.equals("NB ") || flagStop.equals("SB ") || flagStop.equals("EB "))
+		{
+			String tmpString = stop_name.substring(3);
+			StringBuilder sb = new StringBuilder();
+			sb.append(tmpString);
+			flagStop = " " + flagStop;
+			sb.append(flagStop);
+			stop_name = sb.toString();
+		}
+		return stop_name;
+	}
 }

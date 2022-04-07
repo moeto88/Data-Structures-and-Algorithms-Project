@@ -1,9 +1,6 @@
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.PriorityQueue;
-import java.util.Queue;
 
 public class Trip {
 	String arrival_time;
@@ -17,7 +14,7 @@ public class Trip {
 	}
 
 	public boolean makeTripListOfArrivalTime() {
-		int arrivalTime = Integer.valueOf(arrival_time.replaceAll("[^0-9]", ""));
+		int arrivalTime = Integer.valueOf(arrival_time.replaceAll(":", ""));
 		ArrayList<TripDetails> tripList = graph.tripLists.get(arrivalTime);
 		if(tripList != null)
 		{
