@@ -140,7 +140,7 @@ public class Dijkstra {
 			for(int i = finalRouteList.size() - 1; i >= 0; i--)
 			{
 				int stopID = finalRouteList.get(i);
-				System.out.println("\n" + index + ": " + stopID);
+				System.out.println(index + ": " + stopID);
 				StopDetails det = stop.stopLists.get(stopID);
 				System.out.println("   stop_code: " + det.stop_code);
 				System.out.println("   stop_name: " + det.stop_name);
@@ -150,15 +150,14 @@ public class Dijkstra {
 				System.out.println("   zone_id: " + det.zone_id);
 				System.out.println("   stop_url: " + det.stop_url);
 				System.out.println("   location_type: " + det.location_type);
-				System.out.println("   parent_station: " + det.parent_station);
+				System.out.println("   parent_station: " + det.parent_station + "\n");
 				index++;
 			}
 		}
 		else
 		{
-			System.out.println("There is no route from " + startID + " to " + stopID);
+			System.out.println("There is no route from " + startID + " to " + stopID + "\n");
 		}
-		System.out.println();
 	}
 
 	private int getRoutes(int curStop) {

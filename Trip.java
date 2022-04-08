@@ -4,11 +4,13 @@ import java.util.Map;
 
 public class Trip {
 	String arrival_time;
+	String time;
 	DirectedGraph graph;
 	Map<Integer, TripDetails> tripListsOfArrivalTimeWithTripId;
 	int sortedList[];
 
 	public Trip(String arrival_time, DirectedGraph graph) {
+		this.time = arrival_time;
 		this.arrival_time = arrival_time.replaceAll(":", "");
 		this.graph = graph;
 	}
@@ -84,13 +86,25 @@ public class Trip {
 	}
 
 	public void printTripDetails() {
-		System.out.println("Arrival time: " + arrival_time);
-		System.out.println("Full details of all trips starting from " + arrival_time + "\n");
+		System.out.println("Arrival time: " + time);
+		System.out.println("Full details of all trips starting from " + time + ":");
 		for(int i = 0; i < sortedList.length; i++)
 		{
 			TripDetails td = tripListsOfArrivalTimeWithTripId.get(sortedList[i]);
 			System.out.println("   trip_id: " + td.trip_id);
-			System.out.println("   departure_time: " + td.departure_time);
+			
+			String dTime = String.valueOf(td.departure_time);
+			StringBuilder sb = new StringBuilder();
+			sb.append(dTime);
+			sb.insert(dTime.length() - 2, ":");
+			sb.insert(dTime.length() - 4, ":");
+			
+			String departure_time = sb.toString();
+			
+			System.out.println("   departure_time: " + departure_time);
+			
+			
+			
 			System.out.println("   stop_id: " + td.stop_id);
 			System.out.println("   stop_sequence: " + td.stop_sequence);
 			System.out.println("   stop_headsign: " + td.stop_headsign);

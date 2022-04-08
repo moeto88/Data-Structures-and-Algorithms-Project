@@ -8,6 +8,7 @@ import java.util.Map;
 public class TSTTree {
 	DirectedGraph graph;
 	Stop stop;
+	String str;
 	String toSearch;
 	TSTNode root;
 	ArrayList<String> stopNameArray;
@@ -18,6 +19,7 @@ public class TSTTree {
 	public TSTTree(DirectedGraph graph, Stop stop, String toSearch) {
 		this.graph = graph;
 		this.stop = stop;
+		this.str = toSearch;
 		this.toSearch = toSearch.replace(" ", "");
 		this.root = null;
 		makeStopNameArray(stop);
@@ -165,6 +167,8 @@ public class TSTTree {
 		}
 		else
 		{
+			System.out.println("Here are bus stop names starting from " + str + ":");
+			
 			for(String stopName: foundStopNameArray)
 			{
 				StringBuilder sb = new StringBuilder();
@@ -175,8 +179,9 @@ public class TSTTree {
 				{
 					sb.insert(index, " ");
 				}
-				System.out.println(sb.toString());
+				System.out.println("   " + sb.toString());
 			}
+			System.out.println();
 		}
 	}
 }
