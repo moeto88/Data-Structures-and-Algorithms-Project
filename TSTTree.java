@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TSTTree {
 	DirectedGraph graph;
@@ -6,7 +8,8 @@ public class TSTTree {
 	String toSearch;
 	TSTNode root;
 	ArrayList<String> stopNameArray;
-	StringBuilder sb;
+	ArrayList<String> foundStopNameArray;
+	Map<String, ArrayList<Integer>> spaceFinder;
 
 
 	public TSTTree(DirectedGraph graph, Stop stop, String toSearch) {
@@ -74,26 +77,41 @@ public class TSTTree {
 
 	private void makeStopNameArray(Stop stop) {
 		stopNameArray = new ArrayList<String>();
+		spaceFinder = new HashMap<String, ArrayList<Integer>>();
 		for(int key: stop.stopLists.keySet())
 		{
 			StopDetals std = stop.stopLists.get(key);
-			stopNameArray.add(std.stop_name);
+			String nonSpaceString = makeFormattedString(std.stop_name);
+			stopNameArray.add(nonSpaceString);
 		}
+	}
+
+
+	private String makeFormattedString(String stop_name) {
+		ArrayList<Integer> spaceIndexList = new ArrayList<Integer>();
+		int spaceIndex = -1;
+		while(stop_name.indexOf(" ", spaceIndex + 1) != -1)
+		{
+			spaceIndex = stop_name.indexOf(" ", spaceIndex + 1);
+			spaceIndexList.add(spaceIndex);
+		}
+		String nonSpaceString = stop_name.replace(" ", "");
+		spaceFinder.put(nonSpaceString, spaceIndexList);
+		return nonSpaceString;
 	}
 
 
 	public void get() {
 		TSTNode x = get(root, toSearch.toCharArray(), 0);
-		sb = new StringBuilder();
-		findAllBusStops(x, "", sb, toSearch);
-		System.out.println(sb.toString());
+		foundStopNameArray = new ArrayList<String>();
+		findAllBusStops(x, "", toSearch);
 	}
 
 
-	private void findAllBusStops(TSTNode x, String tmp, StringBuilder sb, String stopName) {
+	private void findAllBusStops(TSTNode x, String tmp, String stopName) {
 		if (x != null) 
 		{
-			findAllBusStops(x.left, tmp, sb, stopName);
+			findAllBusStops(x.left, tmp, stopName);
 			tmp = tmp + x.ch;
 
 			if (x.completed) 
@@ -102,19 +120,20 @@ public class TSTTree {
 				{
 					if (stopName.equals(tmp.substring(0, 1)))
 					{
-						sb.append(stopName + tmp.substring(1) + "\n");
+						foundStopNameArray.add(stopName + tmp.substring(1));
+						
 					}
 				} 
 				else
 				{
-					sb.append(stopName + tmp.substring(1) + "\n");
+					foundStopNameArray.add(stopName + tmp.substring(1));
 				}
 
 			}
 			
-			findAllBusStops(x.middle, tmp, sb, stopName);
+			findAllBusStops(x.middle, tmp, stopName);
 			tmp = tmp.substring(0, tmp.length() - 1);
-			findAllBusStops(x.right, tmp, sb, stopName);
+			findAllBusStops(x.right, tmp, stopName);
 		}
 	}
 
@@ -148,13 +167,23 @@ public class TSTTree {
 
 
 	public void print() {
-		if(sb.toString().equals(""))
+		if(foundStopNameArray.size() == 0)
 		{
 			System.out.println("There are no bus stops matching your input\n");
 		}
 		else
 		{
-			System.out.println(sb.toString());
+			for(String stopName: foundStopNameArray)
+			{
+				StringBuilder sb = new StringBuilder();
+				sb.append(stopName);
+				ArrayList<Integer> space = spaceFinder.get(stopName);
+				for(int index: space)
+				{
+					sb.insert(index, " ");
+				}
+				System.out.println(sb.toString());
+			}
 		}
 	}
 }
