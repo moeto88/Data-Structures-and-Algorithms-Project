@@ -9,12 +9,12 @@ public class Trip {
 	int sortedList[];
 
 	public Trip(String arrival_time, DirectedGraph graph) {
-		this.arrival_time = arrival_time;
+		this.arrival_time = arrival_time.replaceAll(":", "");
 		this.graph = graph;
 	}
 
 	public boolean makeTripListOfArrivalTime() {
-		int arrivalTime = Integer.valueOf(arrival_time.replaceAll(":", ""));
+		int arrivalTime = Integer.valueOf(arrival_time);
 		ArrayList<TripDetails> tripList = graph.tripLists.get(arrivalTime);
 		if(tripList != null)
 		{

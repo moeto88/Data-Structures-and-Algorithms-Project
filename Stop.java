@@ -5,12 +5,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Stop {
-	Map<Integer, StopDetals> stopLists;
+	Map<Integer, StopDetails> stopLists;
 
 
 	public Stop(String filename) throws IOException {
 		BufferedReader br = new BufferedReader(new FileReader(filename));
-		stopLists = new HashMap<Integer, StopDetals>();
+		stopLists = new HashMap<Integer, StopDetails>();
 		br.readLine();
 		String curLine = br.readLine();
 
@@ -21,6 +21,8 @@ public class Stop {
 			int stop_id = Integer.valueOf(arrayForLine[0]);
 			String stop_code = arrayForLine[1];
 			String stop_name = arrayForLine[2];
+			
+			
 			String stop_desc = arrayForLine[3];
 			double stop_lat = Double.valueOf(arrayForLine[4]);
 			double stop_lon = Double.valueOf(arrayForLine[5]);
@@ -39,7 +41,7 @@ public class Stop {
 			
 			stop_name = makeMeaningfulStop_name(stop_name);
 
-			StopDetals det = new StopDetals(stop_id, stop_code, stop_name, stop_desc, stop_lat
+			StopDetails det = new StopDetails(stop_id, stop_code, stop_name, stop_desc, stop_lat
 					, stop_lon, zone_id, stop_url, location_type, parent_station);
 
 			stopLists.put(stop_id, det);

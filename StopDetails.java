@@ -1,5 +1,5 @@
 
-public class StopDetals {
+public class StopDetails {
 
 	int stop_id;
 	String stop_code;
@@ -12,7 +12,7 @@ public class StopDetals {
 	int location_type;
 	String parent_station;
 
-	public StopDetals(int stop_id, String stop_code, String stop_name, String stop_desc, double stop_lat, double stop_lon,
+	public StopDetails(int stop_id, String stop_code, String stop_name, String stop_desc, double stop_lat, double stop_lon,
 			String zone_id, String stop_url, int location_type, String parent_station) {
 		this.stop_id = stop_id;
 		this.stop_code = stop_code;

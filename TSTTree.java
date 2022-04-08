@@ -2,6 +2,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+//HAATHERSQUAREBAY1
+
+
 public class TSTTree {
 	DirectedGraph graph;
 	Stop stop;
@@ -15,7 +18,7 @@ public class TSTTree {
 	public TSTTree(DirectedGraph graph, Stop stop, String toSearch) {
 		this.graph = graph;
 		this.stop = stop;
-		this.toSearch = toSearch;
+		this.toSearch = toSearch.replace(" ", "");
 		this.root = null;
 		makeStopNameArray(stop);
 		putStopNameToTST();
@@ -23,25 +26,15 @@ public class TSTTree {
 
 
 	private void putStopNameToTST() {
-		
 		for(String stopName: stopNameArray)
 		{
 			putStopName(stopName);
 		}
-		
-		
-		/*
-		putStopName("HASTINGS ST FS HOLDOM AVE- WB ");
-		 * 
-		 */
-
-
 	}
 
 
 	private void putStopName(String stopName) {
 		root = put(root, stopName.toCharArray(), 0);
-
 	}
 
 
@@ -79,8 +72,8 @@ public class TSTTree {
 		stopNameArray = new ArrayList<String>();
 		spaceFinder = new HashMap<String, ArrayList<Integer>>();
 		for(int key: stop.stopLists.keySet())
-		{
-			StopDetals std = stop.stopLists.get(key);
+		{	
+			StopDetails std = stop.stopLists.get(key);
 			String nonSpaceString = makeFormattedString(std.stop_name);
 			stopNameArray.add(nonSpaceString);
 		}
@@ -121,7 +114,6 @@ public class TSTTree {
 					if (stopName.equals(tmp.substring(0, 1)))
 					{
 						foundStopNameArray.add(stopName + tmp.substring(1));
-						
 					}
 				} 
 				else
@@ -178,6 +170,7 @@ public class TSTTree {
 				StringBuilder sb = new StringBuilder();
 				sb.append(stopName);
 				ArrayList<Integer> space = spaceFinder.get(stopName);
+				
 				for(int index: space)
 				{
 					sb.insert(index, " ");

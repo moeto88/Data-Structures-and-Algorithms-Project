@@ -4,17 +4,19 @@ import java.util.Scanner;
 public class Main {
 	
 	public static void main(String[] args) throws IOException {
-		Scanner scanner = new Scanner(System.in);
 		Stop stop = new Stop("stops.txt");
 		DirectedGraph graph = new DirectedGraph("stop_times.txt");
 		boolean exit = false;
+		Scanner scanner;
 		while(!exit)
 		{
+			
 			System.out.println("Type in 1 if you want to find a shortest paths between 2 bus stops"
 					+ "\n        2 if you want to search for bus stops"
 					+ "\n        3 if you want to search for all trips with a given arrrival time"
 					+ "\n        0 if you want to exit the programme");
-			String eventString = scanner.next();
+			scanner = new Scanner(System.in);
+			String eventString = scanner.nextLine();
 			int event;
 			if(eventString.matches("^[0-9]+$"))
 			{
@@ -32,24 +34,35 @@ public class Main {
 				
 			case 1:
 				System.out.println("Type in 2 bus stop IDs separated by a space");
-				String input1 = scanner.next();
-				String input2 = scanner.next();
+				scanner = new Scanner(System.in);
+				String line = scanner.nextLine();
+				String arr[] = line.split(" ");	
 				
-				if(input1.matches("^[0-9]+$") && input2.matches("^[0-9]+$"))
+				if(arr.length == 2)
 				{
-					int bus_stop1 = Integer.valueOf(input1);
-					int bus_stop2 = Integer.valueOf(input2);
+					String input1 = arr[0];
+					String input2 = arr[1];
 					
-					Dijkstra algo = new Dijkstra(graph, stop, bus_stop1, bus_stop2);
-					if(algo.dijkstraAlgo() == true)
+					if(input1.matches("^[0-9]+$") && input2.matches("^[0-9]+$"))
 					{
-						algo.printRoute();
-						algo.printCost();
+						int bus_stop1 = Integer.valueOf(input1);
+						int bus_stop2 = Integer.valueOf(input2);
+						
+						Dijkstra algo = new Dijkstra(graph, stop, bus_stop1, bus_stop2);
+						if(algo.dijkstraAlgo() == true)
+						{
+							algo.printRoute();
+							algo.printCost();
+						}
+						else
+						{
+							System.out.println("There is no bus stop IDs you typed in\n");
+						}	
 					}
 					else
 					{
-						System.out.println("There is no bus stop IDs you typed in\n");
-					}	
+						System.out.println("Please type in valid bus stop IDs --like 1887 1888\n");
+					}
 				}
 				else
 				{
@@ -61,8 +74,9 @@ public class Main {
 				
 			case 2:
 				System.out.println("Type in a name or characters to search for bus stops");
-				String toSearch = scanner.next();
-				if(toSearch.matches("^[A-Z ]+$"))
+				scanner = new Scanner(System.in);
+				String toSearch = scanner.nextLine();
+				if(toSearch.matches("^[A-Z0-9 -]+$"))
 				{
 					TSTTree tst = new TSTTree(graph, stop, toSearch);
 					tst.get();
@@ -77,18 +91,41 @@ public class Main {
 				
 			case 3:
 				System.out.println("Type in an arrival time as hh:mm:ss");
-				String arrival_time = scanner.next();
+				scanner = new Scanner(System.in);
+				String arrival_time = scanner.nextLine();
 				if(arrival_time.matches("^[0-9:]+$"))
 				{
-					Trip trip = new Trip(arrival_time, graph);
-					if(trip.makeTripListOfArrivalTime() == true)
+					String time[] = arrival_time.split(":");
+					if(time.length == 3)
 					{
-						trip.printTripDetails();
+						int hour = Integer.valueOf(time[0]);
+						int minute = Integer.valueOf(time[1]);
+						int second = Integer.valueOf(time[2]);
+						
+						if(hour >= 0 && hour <= 23 && minute >= 0 && minute <= 59 && second >= 0 && second <= 59)
+						{
+							Trip trip = new Trip(arrival_time, graph);
+							if(trip.makeTripListOfArrivalTime() == true)
+							{
+								trip.printTripDetails();
+							}
+							else
+							{
+								System.out.println("There is no such an arrival time you typed in\n");
+							}	
+						}
+						else
+						{
+							System.out.println("Please type in a valid arrival time -- like 19:00:00\n");
+						}
+						
+					
 					}
 					else
 					{
-						System.out.println("There is no such an arrival time you typed in\n");
+						System.out.println("Please type in a valid arrival time -- like 19:00:00\n");
 					}
+					
 				}
 				else
 				{
@@ -100,6 +137,5 @@ public class Main {
 				System.out.println("Error: Please type 1, 2, 3, or 0");
 			}
 		}
-		scanner.close();
 	}
 }

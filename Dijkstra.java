@@ -24,10 +24,9 @@ public class Dijkstra {
 	}
 
 	public boolean dijkstraAlgo() {
-		Map<Integer, ArrayList<Edge>> adjList = graph.adjLists;
-		ArrayList<Edge> findStartId = adjList.get(startID);
-		if(findStartId != null)
+		if(findStopIDs())
 		{
+			Map<Integer, ArrayList<Edge>> adjList = graph.adjLists;
 			distTo = new double[graph.maxId];
 			Queue<Integer> pq = new PriorityQueue<>(Comparator.comparing(integer -> distTo[integer]));
 			routeList = new HashMap<Integer, ArrayList<Route>>();
@@ -109,6 +108,20 @@ public class Dijkstra {
 		}
 	}
 
+	private boolean findStopIDs() {
+		StopDetails isFound1 = stop.stopLists.get(startID);
+		StopDetails isFound2 = stop.stopLists.get(stopID);
+		
+		if(isFound1 != null && isFound2 != null)
+		{
+			return true;
+		}
+		else
+		{
+			return false;	
+		}
+	}
+
 	public void printRoute() {
 		
 		if(getCost() != 0)
@@ -128,7 +141,7 @@ public class Dijkstra {
 			{
 				int stopID = finalRouteList.get(i);
 				System.out.println("\n" + index + ": " + stopID);
-				StopDetals det = stop.stopLists.get(stopID);
+				StopDetails det = stop.stopLists.get(stopID);
 				System.out.println("   stop_code: " + det.stop_code);
 				System.out.println("   stop_name: " + det.stop_name);
 				System.out.println("   stop_desc: " + det.stop_desc);
