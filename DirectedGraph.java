@@ -18,7 +18,6 @@ public class DirectedGraph {
 		br.readLine();
 		String curLine = br.readLine();
 
-
 		while(curLine != null)
 		{
 			curLine = curLine.replace(", ", ",");
@@ -69,6 +68,7 @@ public class DirectedGraph {
 			StopIDWithTripID id1 = tmpLists.get(i);
 			i++;
 			StopIDWithTripID id2 = tmpLists.get(i);
+			i--;
 
 			if(id1.trip_id == id2.trip_id)
 			{

@@ -185,10 +185,30 @@ public class Dijkstra {
 
 	public void printCost() {
 		double cost = getCost();
-		System.out.println("The cost associated with a route from " + startID + " to " + stopID + " is " + cost + "\n");
+		if(cost > 0)
+		{
+			System.out.println("The cost associated with a route from " + startID + " to " + stopID + " is " + cost + "\n");
+		}
 	}
 
 	private double getCost() {
+		
+		Map<Integer, ArrayList<Edge>> a = graph.adjLists;
+		for(int key: a.keySet())
+		{
+			ArrayList<Edge> b = a.get(key);
+			for(Edge ed: b)
+			{
+				if(costTo[ed.vertex] == 0)
+				{
+					System.out.println(ed.vertex);
+				}
+					
+			}
+			
+		}
+		
+		
 		return costTo[stopID];
 	}
 }
