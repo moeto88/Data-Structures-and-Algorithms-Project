@@ -10,7 +10,7 @@ public class Dijkstra {
 	double posInfinity = Double.POSITIVE_INFINITY;
 	Map<Integer, ArrayList<Route>> routeList;
 	ArrayList<Integer> finalRouteList;
-	double distTo[];
+	double costTo[];
 	DirectedGraph graph;
 	Stop stop;
 	int startID;
@@ -27,8 +27,8 @@ public class Dijkstra {
 		if(findStopIDs())
 		{
 			Map<Integer, ArrayList<Edge>> adjList = graph.adjLists;
-			distTo = new double[graph.maxId];
-			Queue<Integer> pq = new PriorityQueue<>(Comparator.comparing(integer -> distTo[integer]));
+			costTo = new double[graph.maxId];
+			Queue<Integer> pq = new PriorityQueue<>(Comparator.comparing(integer -> costTo[integer]));
 			routeList = new HashMap<Integer, ArrayList<Route>>();
 			
 			for(int i = 0; i < graph.maxId; i++)
@@ -40,18 +40,18 @@ public class Dijkstra {
 					{
 						if(startID == edge.adjVertex)
 						{
-							distTo[i] = edge.weight;
+							costTo[i] = edge.weight;
 							break;
 						}
 						else
 						{
-							distTo[i] = 0;
+							costTo[i] = 0;
 						}
 					}
 				}
 				else
 				{
-					distTo[i] = posInfinity;
+					costTo[i] = posInfinity;
 				}
 			}
 			
@@ -76,11 +76,11 @@ public class Dijkstra {
 					
 					if(completedVertex[connectingVertex] == false)
 					{
-						double updatedWeight = distTo[vertex] + edge.weight;
+						double updatedWeight = costTo[vertex] + edge.weight;
 						
-						if(updatedWeight < distTo[connectingVertex])
+						if(updatedWeight < costTo[connectingVertex])
 						{
-							distTo[connectingVertex] = updatedWeight;
+							costTo[connectingVertex] = updatedWeight;
 							ArrayList<Route> tmpList = routeList.get(vertex);
 							if(tmpList == null)
 							{
@@ -189,6 +189,6 @@ public class Dijkstra {
 	}
 
 	private double getCost() {
-		return distTo[stopID];
+		return costTo[stopID];
 	}
 }
