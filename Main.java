@@ -15,6 +15,7 @@ public class Main {
 					+ "\n        2 if you want to search for bus stops"
 					+ "\n        3 if you want to search for all trips with a given arrrival time"
 					+ "\n        0 if you want to exit the programme");
+			
 			scanner = new Scanner(System.in);
 			String eventString = scanner.nextLine();
 			int event;
