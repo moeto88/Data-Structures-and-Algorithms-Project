@@ -11,9 +11,9 @@ public class Main {
 		while(!exit)
 		{
 			
-			System.out.println("Type in 1 if you want to find a shortest paths between 2 bus stops"
-					+ "\n        2 if you want to search for bus stops"
-					+ "\n        3 if you want to search for all trips with a given arrrival time"
+			System.out.println("Type in 1 if you want to find a shortest paths between 2 bus stops --like 1887 1888"
+					+ "\n        2 if you want to search for bus stops --should be UPPERCASE like HASTINGS"
+					+ "\n        3 if you want to search for all trips with a given arrrival time --like 19:00:00"
 					+ "\n        0 if you want to exit the programme");
 			
 			scanner = new Scanner(System.in);
@@ -117,20 +117,20 @@ public class Main {
 						}
 						else
 						{
-							System.out.println("Please type in a valid arrival time -- like 19:00:00\n");
+							System.out.println("Please type in a valid arrival time --like 19:00:00\n");
 						}
 						
 					
 					}
 					else
 					{
-						System.out.println("Please type in a valid arrival time -- like 19:00:00\n");
+						System.out.println("Please type in a valid arrival time --like 19:00:00\n");
 					}
 					
 				}
 				else
 				{
-					System.out.println("Please type in a valid arrival time -- like 19:00:00\n");
+					System.out.println("Please type in a valid arrival time --like 19:00:00\n");
 				}
 				break;
 				
